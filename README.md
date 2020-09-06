@@ -67,7 +67,7 @@ Your VPS' public IP address.
 **webhook** *[Optional]*  
 If you want to receive notifications, supply your Slack webhook URL. You'll be notified of any lookups of your domain name, or for any subdomains of your domain (I've excluded notifications for queries for any other apex domains and for your custom name servers to avoid excessive or random notifications). If you do not supply a webhook, interactions will be logged to standard output instead. Webhook setup instructions can be found [here](https://api.slack.com/messaging/webhooks).
 
-**telegrambottoken and telegramchatid**
+**telegrambottoken** and **telegramchatid** *[Optional]*  
 If you want to receive notifications, supply your Telegram BOT Token and Chat ID. A quick guide can be found [here](https://gist.github.com/dideler/85de4d64f66c1966788c1b2304b9caf1).
 
 **recordsFile** *[Optional]*  
