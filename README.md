@@ -1,6 +1,6 @@
 # DNSObserver
 
-A handy DNS service written in Go to aid in the detection of several types of blind vulnerabilities. It monitors a pentester's server for out-of-band DNS interactions and sends notifications with the received request's details via Slack. DNSObserver can help you find bugs such as blind OS command injection, blind SQLi, blind XXE, and many more!
+A handy DNS service written in Go to aid in the detection of several types of blind vulnerabilities. It monitors a pentester's server for out-of-band DNS interactions and sends notifications with the received request's details via Slack and/or Telegram BOT. DNSObserver can help you find bugs such as blind OS command injection, blind SQLi, blind XXE, and many more!
 
 ![ScreenShot](https://raw.githubusercontent.com/allyomalley/dnsobserver/master/notification.png)
 
@@ -16,6 +16,7 @@ What you'll need:
 * Your own registered domain name
 * A Virtual Private Server (VPS) to run the script on (I'm using Ubuntu - I have not tested this tool on other systems)
 * *[Optional]* Your own Slack workspace and a webhook
+* *[Optional]* Your own Telegram BOT
 
 ### Domain and DNS Configuration
 
@@ -66,6 +67,9 @@ Your VPS' public IP address.
 **webhook** *[Optional]*  
 If you want to receive notifications, supply your Slack webhook URL. You'll be notified of any lookups of your domain name, or for any subdomains of your domain (I've excluded notifications for queries for any other apex domains and for your custom name servers to avoid excessive or random notifications). If you do not supply a webhook, interactions will be logged to standard output instead. Webhook setup instructions can be found [here](https://api.slack.com/messaging/webhooks).
 
+**telegrambottoken and telegramchatid**
+If you want to receive notifications, supply your Telegram BOT Token and Chat ID. A quick guide can be found [here](https://gist.github.com/dideler/85de4d64f66c1966788c1b2304b9caf1).
+
 **recordsFile** *[Optional]*  
 By default, DNSObserver will only respond with an answer to queries for your domain name, or either of its name servers. For any other host, it will still notify you of the interaction (as long as it's your domain or a subdomain), but will send back an empty response. If you want DNSObserver to answer to A lookups for certain hosts with an address, you can either edit the config.yml file included in this project, or create your own based on this template:
 
@@ -95,7 +99,7 @@ These settings mean that I want to respond to queries for 'google.com' with '1.2
 
 Now, we are ready to start listening! If you want to be able to do other work on your VPS while DNSObserver runs, start up a new tmux session first. 
 
-For the standard setup, pass in the required arguments and your webhook:
+For the standard setup, pass in the required arguments and your Slack webhook:
 
 ```
 dnsobserver --domain example.com --ip 11.22.33.44 --webhook https://hooks.slack.com/services/XXX/XXX/XXX
@@ -104,6 +108,11 @@ dnsobserver --domain example.com --ip 11.22.33.44 --webhook https://hooks.slack.
 To achieve the above, but also include some custom A lookup responses, add the argument for your records file:
 ```
 dnsobserver --domain example.com --ip 11.22.33.44 --webhook https://hooks.slack.com/services/XXX/XXX/XXX --recordsFile my_records.yml
+```
+
+Now if you want to get notification on your Telegram BOT.
+```
+dnsobserver --domain example.com --ip 11.22.33.44 --telegrambottoken "0123456789:AAAAAAAAAAAAAAAA-BBBBBBBBBBBBBBBBBB" --telegramchatid 123456789
 ```
 
 Assuming you've set everything up correctly, DNSObserver should now be running. To confirm it's working, open up a terminal on your desktop and perform a lookup of your new domain ('example.com' in this demo):
